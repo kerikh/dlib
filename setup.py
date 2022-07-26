@@ -52,20 +52,20 @@ def get_extra_cmake_options():
 
     opt_key = None
 
-    argv = [arg for arg in sys.argv]  # take a copy
+    argv = list(sys.argv)
     # parse command line options and consume those we care about
     for arg in argv:
-        if opt_key == 'compiler-flags':
-            _cmake_extra_options.append('-DCMAKE_CXX_FLAGS={arg}'.format(arg=arg.strip()))
-        elif opt_key == 'G':
+        if opt_key == 'G':
             _cmake_extra_options += ['-G', arg.strip()]
-        elif opt_key == 'yes':
-            _cmake_extra_options.append('-D{arg}=yes'.format(arg=arg.strip()))
+        elif opt_key == 'compiler-flags':
+            _cmake_extra_options.append('-DCMAKE_CXX_FLAGS={arg}'.format(arg=arg.strip()))
         elif opt_key == 'no':
             _cmake_extra_options.append('-D{arg}=no'.format(arg=arg.strip()))
         elif opt_key == 'set':
             _cmake_extra_options.append('-D{arg}'.format(arg=arg.strip()))
 
+        elif opt_key == 'yes':
+            _cmake_extra_options.append('-D{arg}=yes'.format(arg=arg.strip()))
         if opt_key:
             sys.argv.remove(arg)
             opt_key = None
@@ -121,13 +121,15 @@ class CMakeBuild(build_ext):
                                   " CMake must be installed to build the following extensions: " +
                                ", ".join(e.name for e in self.extensions) + 
                                "\n*******************************************************************\n")
-        return re.search(r'version\s*([\d.]+)', out.decode()).group(1)
+        return re.search(r'version\s*([\d.]+)', out.decode())[1]
 
     def run(self):
         cmake_version = self.get_cmake_version()
-        if platform.system() == "Windows":
-            if LooseVersion(cmake_version) < '3.1.0':
-                raise RuntimeError("CMake >= 3.1.0 is required on Windows")
+        if (
+            platform.system() == "Windows"
+            and LooseVersion(cmake_version) < '3.1.0'
+        ):
+            raise RuntimeError("CMake >= 3.1.0 is required on Windows")
 
         for ext in self.extensions:
             self.build_extension(ext)
@@ -135,8 +137,11 @@ class CMakeBuild(build_ext):
     def build_extension(self, ext):
         extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
 
-        cmake_args = ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
-                      '-DPYTHON_EXECUTABLE=' + sys.executable]
+        cmake_args = [
+            f'-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extdir}',
+            f'-DPYTHON_EXECUTABLE={sys.executable}',
+        ]
+
 
         cmake_args += cmake_extra_options 
 
@@ -144,15 +149,15 @@ class CMakeBuild(build_ext):
         build_args = ['--config', cfg]
 
         if platform.system() == "Windows":
-            cmake_args += ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(cfg.upper(), extdir)]
+            cmake_args += [f'-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{cfg.upper()}={extdir}']
             if sys.maxsize > 2**32:
                 cmake_args += ['-A', 'x64']
             # Do a parallel build
-            build_args += ['--', '/m'] 
+            build_args += ['--', '/m']
         else:
-            cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
+            cmake_args += [f'-DCMAKE_BUILD_TYPE={cfg}']
             # Do a parallel build
-            build_args += ['--', '-j'+str(num_available_cpu_cores(2))]
+            build_args += ['--', f'-j{str(num_available_cpu_cores(2))}']
 
         build_folder = os.path.abspath(self.build_temp)
 
@@ -165,10 +170,10 @@ class CMakeBuild(build_ext):
         cmake_build = ['cmake', '--build', '.'] + build_args
 
         print("Building extension for Python {}".format(sys.version.split('\n',1)[0]))
-        print("Invoking CMake setup: '{}'".format(' '.join(cmake_setup)))
+        print(f"Invoking CMake setup: '{' '.join(cmake_setup)}'")
         sys.stdout.flush()
         subprocess.check_call(cmake_setup, cwd=build_folder)
-        print("Invoking CMake build: '{}'".format(' '.join(cmake_build)))
+        print(f"Invoking CMake build: '{' '.join(cmake_build)}'")
         sys.stdout.flush()
         subprocess.check_call(cmake_build, cwd=build_folder)
 
@@ -211,7 +216,7 @@ def read_version_from_cmakelists(cmake_file):
     major = re.findall("set\(CPACK_PACKAGE_VERSION_MAJOR.*\"(.*)\"", open(cmake_file).read())[0]
     minor = re.findall("set\(CPACK_PACKAGE_VERSION_MINOR.*\"(.*)\"", open(cmake_file).read())[0]
     patch = re.findall("set\(CPACK_PACKAGE_VERSION_PATCH.*\"(.*)\"", open(cmake_file).read())[0]
-    return major + '.' + minor + '.' + patch
+    return f'{major}.{minor}.{patch}'
 
 def read_entire_file(fname):
     """Read text out of a file relative to setup.py.

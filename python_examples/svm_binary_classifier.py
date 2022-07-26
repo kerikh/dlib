@@ -54,8 +54,8 @@ svm.set_c(10)
 classifier = svm.train(x, y)
 
 # Now run the model on our data and look at the results.
-print("prediction for first sample:  {}".format(classifier(x[0])))
-print("prediction for second sample: {}".format(classifier(x[1])))
+print(f"prediction for first sample:  {classifier(x[0])}")
+print(f"prediction for second sample: {classifier(x[1])}")
 
 
 # classifier models can also be pickled in the same was as any other python object.

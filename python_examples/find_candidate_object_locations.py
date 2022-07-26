@@ -40,7 +40,8 @@ img = dlib.load_rgb_image(image_file)
 rects = []
 dlib.find_candidate_object_locations(img, rects, min_size=500)
 
-print("number of rectangles found {}".format(len(rects))) 
+print(f"number of rectangles found {len(rects)}")
 for k, d in enumerate(rects):
-    print("Detection {}: Left: {} Top: {} Right: {} Bottom: {}".format(
-        k, d.left(), d.top(), d.right(), d.bottom()))
+    print(
+        f"Detection {k}: Left: {d.left()} Top: {d.top()} Right: {d.right()} Bottom: {d.bottom()}"
+    )

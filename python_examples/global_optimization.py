@@ -42,6 +42,6 @@ x,y = dlib.find_min_global(holder_table,
                            [10,10],    # Upper bound constraints on x0 and x1 respectively
                            80)         # The number of times find_min_global() will call holder_table()
 
-print("optimal inputs: {}".format(x));
-print("optimal output: {}".format(y));
+print(f"optimal inputs: {x}");
+print(f"optimal output: {y}");
 

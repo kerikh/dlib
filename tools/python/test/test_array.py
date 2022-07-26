@@ -82,7 +82,7 @@ def test_array_extend():
 
 def test_array_string_representations_empty():
     a = array()
-    assert str(a) == ""
+    assert not str(a)
     assert repr(a) == "array[]"
 
 

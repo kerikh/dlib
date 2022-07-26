@@ -80,16 +80,20 @@ dlib.train_shape_predictor(training_xml_path, "predictor.dat", options)
 # Now that we have a model we can test it.  dlib.test_shape_predictor()
 # measures the average distance between a face landmark output by the
 # shape_predictor and where it should be according to the truth data.
-print("\nTraining accuracy: {}".format(
-    dlib.test_shape_predictor(training_xml_path, "predictor.dat")))
+print(
+    f'\nTraining accuracy: {dlib.test_shape_predictor(training_xml_path, "predictor.dat")}'
+)
+
 # The real test is to see how well it does on data it wasn't trained on.  We
 # trained it on a very small dataset so the accuracy is not extremely high, but
 # it's still doing quite good.  Moreover, if you train it on one of the large
 # face landmarking datasets you will obtain state-of-the-art results, as shown
 # in the Kazemi paper.
 testing_xml_path = os.path.join(faces_folder, "testing_with_face_landmarks.xml")
-print("Testing accuracy: {}".format(
-    dlib.test_shape_predictor(testing_xml_path, "predictor.dat")))
+print(
+    f'Testing accuracy: {dlib.test_shape_predictor(testing_xml_path, "predictor.dat")}'
+)
+
 
 # Now let's use it as you would in a normal application.  First we will load it
 # from disk. We also need to load a face detector to provide the initial
@@ -102,7 +106,7 @@ detector = dlib.get_frontal_face_detector()
 print("Showing detections and predictions on the images in the faces folder...")
 win = dlib.image_window()
 for f in glob.glob(os.path.join(faces_folder, "*.jpg")):
-    print("Processing file: {}".format(f))
+    print(f"Processing file: {f}")
     img = dlib.load_rgb_image(f)
 
     win.clear_overlay()
@@ -112,14 +116,15 @@ for f in glob.glob(os.path.join(faces_folder, "*.jpg")):
     # second argument indicates that we should upsample the image 1 time. This
     # will make everything bigger and allow us to detect more faces.
     dets = detector(img, 1)
-    print("Number of faces detected: {}".format(len(dets)))
+    print(f"Number of faces detected: {len(dets)}")
     for k, d in enumerate(dets):
-        print("Detection {}: Left: {} Top: {} Right: {} Bottom: {}".format(
-            k, d.left(), d.top(), d.right(), d.bottom()))
+        print(
+            f"Detection {k}: Left: {d.left()} Top: {d.top()} Right: {d.right()} Bottom: {d.bottom()}"
+        )
+
         # Get the landmarks/parts for the face in box d.
         shape = predictor(img, d)
-        print("Part 0: {}, Part 1: {} ...".format(shape.part(0),
-                                                  shape.part(1)))
+        print(f"Part 0: {shape.part(0)}, Part 1: {shape.part(1)} ...")
         # Draw the face landmarks on the screen.
         win.add_overlay(shape)
 

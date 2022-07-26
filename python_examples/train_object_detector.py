@@ -83,13 +83,17 @@ dlib.train_simple_object_detector(training_xml_path, "detector.svm", options)
 # it on the training data.  It will print(the precision, recall, and then)
 # average precision.
 print("")  # Print blank line to create gap from previous output
-print("Training accuracy: {}".format(
-    dlib.test_simple_object_detector(training_xml_path, "detector.svm")))
+print(
+    f'Training accuracy: {dlib.test_simple_object_detector(training_xml_path, "detector.svm")}'
+)
+
 # However, to get an idea if it really worked without overfitting we need to
 # run it on images it wasn't trained on.  The next line does this.  Happily, we
 # see that the object detector works perfectly on the testing images.
-print("Testing accuracy: {}".format(
-    dlib.test_simple_object_detector(testing_xml_path, "detector.svm")))
+print(
+    f'Testing accuracy: {dlib.test_simple_object_detector(testing_xml_path, "detector.svm")}'
+)
+
 
 
 
@@ -108,13 +112,15 @@ win_det.set_image(detector)
 print("Showing detections on the images in the faces folder...")
 win = dlib.image_window()
 for f in glob.glob(os.path.join(faces_folder, "*.jpg")):
-    print("Processing file: {}".format(f))
+    print(f"Processing file: {f}")
     img = dlib.load_rgb_image(f)
     dets = detector(img)
-    print("Number of faces detected: {}".format(len(dets)))
+    print(f"Number of faces detected: {len(dets)}")
     for k, d in enumerate(dets):
-        print("Detection {}: Left: {} Top: {} Right: {} Bottom: {}".format(
-            k, d.left(), d.top(), d.right(), d.bottom()))
+        print(
+            f"Detection {k}: Left: {d.left()} Top: {d.top()} Right: {d.right()} Bottom: {d.bottom()}"
+        )
+
 
     win.clear_overlay()
     win.set_image(img)
@@ -126,14 +132,17 @@ for f in glob.glob(os.path.join(faces_folder, "*.jpg")):
 detector1 = dlib.fhog_object_detector("detector.svm")
 # In this example we load detector.svm again since it's the only one we have on
 # hand. But in general it would be a different detector.
-detector2 = dlib.fhog_object_detector("detector.svm") 
+detector2 = dlib.fhog_object_detector("detector.svm")
 # make a list of all the detectors you wan to run.  Here we have 2, but you
 # could have any number.
 detectors = [detector1, detector2]
-image = dlib.load_rgb_image(faces_folder + '/2008_002506.jpg')
+image = dlib.load_rgb_image(f'{faces_folder}/2008_002506.jpg')
 [boxes, confidences, detector_idxs] = dlib.fhog_object_detector.run_multiple(detectors, image, upsample_num_times=1, adjust_threshold=0.0)
 for i in range(len(boxes)):
-    print("detector {} found box {} with confidence {}.".format(detector_idxs[i], boxes[i], confidences[i]))
+    print(
+        f"detector {detector_idxs[i]} found box {boxes[i]} with confidence {confidences[i]}."
+    )
+
 
 # Finally, note that you don't have to use the XML based input to
 # train_simple_object_detector().  If you have already loaded your training
@@ -141,8 +150,11 @@ for i in range(len(boxes)):
 # below.
 
 # You just need to put your images into a list.
-images = [dlib.load_rgb_image(faces_folder + '/2008_002506.jpg'),
-          dlib.load_rgb_image(faces_folder + '/2009_004587.jpg')]
+images = [
+    dlib.load_rgb_image(f'{faces_folder}/2008_002506.jpg'),
+    dlib.load_rgb_image(f'{faces_folder}/2009_004587.jpg'),
+]
+
 # Then for each image you make a list of rectangles which give the pixel
 # locations of the edges of the boxes.
 boxes_img1 = ([dlib.rectangle(left=329, top=78, right=437, bottom=186),
@@ -166,5 +178,6 @@ dlib.hit_enter_to_continue()
 # test_simple_object_detector().  If you have already loaded your training
 # images and bounding boxes for the objects then you can call it as shown
 # below.
-print("\nTraining accuracy: {}".format(
-    dlib.test_simple_object_detector(images, boxes, detector2)))
+print(
+    f"\nTraining accuracy: {dlib.test_simple_object_detector(images, boxes, detector2)}"
+)

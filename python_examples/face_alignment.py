@@ -50,7 +50,7 @@ dets = detector(img, 1)
 
 num_faces = len(dets)
 if num_faces == 0:
-    print("Sorry, there were no faces found in '{}'".format(face_file_path))
+    print(f"Sorry, there were no faces found in '{face_file_path}'")
     exit()
 
 # Find the 5 face landmarks we need to do the alignment.

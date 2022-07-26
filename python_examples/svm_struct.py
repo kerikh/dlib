@@ -76,12 +76,11 @@ def predict_label(weights, sample):
     # weight vectors out of weights and then evaluates each against sample.  The
     # individual classifier scores are stored in scores and the highest scoring
     # index is returned as the label.
-    w0 = weights[0:3]
+    w0 = weights[:3]
     w1 = weights[3:6]
     w2 = weights[6:9]
     scores = [dot(w0, sample), dot(w1, sample), dot(w2, sample)]
-    max_scoring_label = scores.index(max(scores))
-    return max_scoring_label
+    return scores.index(max(scores))
 
 
 def dot(a, b):
@@ -250,7 +249,7 @@ class ThreeClassClassifierProblem:
         psi.resize(self.num_dimensions)
         dims = len(x)
         if label == 0:
-            for i in range(0, dims):
+            for i in range(dims):
                 psi[i] = x[i]
         elif label == 1:
             for i in range(dims, 2 * dims):
@@ -303,7 +302,7 @@ class ThreeClassClassifierProblem:
         dims = len(samp)
         scores = [0, 0, 0]
         # compute scores for each of the three classifiers
-        scores[0] = dot(current_solution[0:dims], samp)
+        scores[0] = dot(current_solution[:dims], samp)
         scores[1] = dot(current_solution[dims:2*dims], samp)
         scores[2] = dot(current_solution[2*dims:3*dims], samp)
 
@@ -324,11 +323,7 @@ class ThreeClassClassifierProblem:
         max_scoring_label = scores.index(max(scores))
         # And finally record the loss that was associated with that predicted
         # label. Again, the loss is 1 if the label is incorrect and 0 otherwise.
-        if max_scoring_label == self.labels[idx]:
-            loss = 0
-        else:
-            loss = 1
-
+        loss = 0 if max_scoring_label == self.labels[idx] else 1
         # Finally, return the loss and PSI vector corresponding to the label
         # we just found.
         psi = self.make_psi(samp, max_scoring_label)

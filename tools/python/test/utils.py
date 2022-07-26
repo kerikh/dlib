@@ -24,22 +24,20 @@ def load_pickled_compatible(file_name):
         import cPickle as pickle  # Use cPickle on Python 2.7
     except ImportError:
         import pickle
-    
+
     with open(file_name, "rb") as handle:
         data = handle.read()
-        if not is_python3():
-            return pickle.loads(data)
-        else:
-            return pickle.loads(data, encoding="bytes")
+        return (
+            pickle.loads(data, encoding="bytes")
+            if is_python3()
+            else pickle.loads(data)
+        )
 
 def is_numpy_installed():
     '''
         Returns True if Numpy is installed otherwise False
     '''
-    if pkgutil.find_loader("numpy"):
-        return True
-    else:
-        return False
+    return bool(pkgutil.find_loader("numpy"))
 
 def is_python3():
     '''

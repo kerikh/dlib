@@ -84,7 +84,7 @@ def print_segment(sentence, names):
     words = sentence.split()
     for name in names:
         for i in name:
-            sys.stdout.write(words[i] + " ")
+            sys.stdout.write(f"{words[i]} ")
         sys.stdout.write("\n")
 
 
@@ -93,9 +93,6 @@ def print_segment(sentence, names):
 # set of ranges which indicate the locations of any names.   
 names = dlib.ranges()     # make an array of dlib.range objects.
 segments = dlib.rangess() # make an array of arrays of dlib.range objects.
-sentences = []
-
-sentences.append("The other day I saw a man named Jim Smith")
 # We want to detect person names.  So we note that the name is located within
 # the range [8, 10).  Note that we use half open ranges to identify segments.
 # So in this case, the segment identifies the string "Jim Smith".
@@ -103,28 +100,32 @@ names.append(dlib.range(8, 10))
 segments.append(names)
 names.clear() # make names empty for use again below
 
-sentences.append("Davis King is the main author of the dlib Library")
 names.append(dlib.range(0, 2))
 segments.append(names)
 names.clear()
 
-sentences.append("Bob Jones is a name and so is George Clinton")
 names.append(dlib.range(0, 2))
 names.append(dlib.range(8, 10))
 segments.append(names)
 names.clear()
 
-sentences.append("My dog is named Bob Barker")
 names.append(dlib.range(4, 6))
 segments.append(names)
 names.clear()
 
-sentences.append("ABC is an acronym but John James Smith is a name")
 names.append(dlib.range(5, 8))
 segments.append(names)
 names.clear()
 
-sentences.append("No names in this sentence at all")
+sentences = [
+    "The other day I saw a man named Jim Smith",
+    "Davis King is the main author of the dlib Library",
+    "Bob Jones is a name and so is George Clinton",
+    "My dog is named Bob Barker",
+    "ABC is an acronym but John James Smith is a name",
+    "No names in this sentence at all",
+]
+
 segments.append(names)
 names.clear()
 
@@ -183,8 +184,10 @@ else:
 # We can also measure the accuracy of a model relative to some labeled data.
 # This statement prints the precision, recall, and F1-score of the model
 # relative to the data in training_sequences/segments.
-print("Test on training data: {}".format(
-      dlib.test_sequence_segmenter(model, training_sequences, segments)))
+print(
+    f"Test on training data: {dlib.test_sequence_segmenter(model, training_sequences, segments)}"
+)
+
 
 # We can also do 5-fold cross-validation and print the resulting precision,
 # recall, and F1-score.

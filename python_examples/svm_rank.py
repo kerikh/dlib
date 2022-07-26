@@ -57,11 +57,9 @@ rank = trainer.train(data)
 
 # Now if you call rank on a vector it will output a ranking score.  In
 # particular, the ranking score for relevant vectors should be larger than the
-# score for non-relevant vectors.  
-print("Ranking score for a relevant vector:     {}".format(
-    rank(data.relevant[0])))
-print("Ranking score for a non-relevant vector: {}".format(
-    rank(data.nonrelevant[0])))
+# score for non-relevant vectors.
+print(f"Ranking score for a relevant vector:     {rank(data.relevant[0])}")
+print(f"Ranking score for a non-relevant vector: {rank(data.nonrelevant[0])}")
 # The output is the following:
 #    ranking score for a relevant vector:     0.5
 #    ranking score for a non-relevant vector: -0.5
@@ -77,7 +75,7 @@ print(dlib.test_ranking_function(rank, data))
 # The ranking scores are computed by taking the dot product between a learned
 # weight vector and a data vector.  If you want to see the learned weight vector
 # you can display it like so:
-print("Weights: {}".format(rank.weights))
+print(f"Weights: {rank.weights}")
 # In this case the weights are:
 #  0.5 
 # -0.5 
@@ -114,8 +112,10 @@ rank = trainer.train(queries)
 # splits and returns the overall ranking accuracy based on the held out data.
 # Just like test_ranking_function(), it reports both the ordering accuracy and
 # mean average precision.
-print("Cross validation results: {}".format(
-    dlib.cross_validate_ranking_trainer(trainer, queries, 4)))
+print(
+    f"Cross validation results: {dlib.cross_validate_ranking_trainer(trainer, queries, 4)}"
+)
+
 
 # Finally, note that the ranking tools also support the use of sparse vectors in
 # addition to dense vectors (which we used above).  So if we wanted to do
@@ -142,10 +142,8 @@ data.nonrelevant.append(samp)
 
 trainer = dlib.svm_rank_trainer_sparse()
 rank = trainer.train(data)
-print("Ranking score for a relevant vector:     {}".format(
-    rank(data.relevant[0])))
-print("Ranking score for a non-relevant vector: {}".format(
-    rank(data.nonrelevant[0])))
+print(f"Ranking score for a relevant vector:     {rank(data.relevant[0])}")
+print(f"Ranking score for a non-relevant vector: {rank(data.nonrelevant[0])}")
 # Just as before, the output is the following:
 #    ranking score for a relevant vector:     0.5
 #    ranking score for a non-relevant vector: -0.5

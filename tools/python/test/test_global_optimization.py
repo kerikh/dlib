@@ -36,10 +36,10 @@ def test_global_function_search():
 
     opt = dlib.global_function_search([spec_F, spec_G])
 
-    for i in range(15):
+    for _ in range(15):
         next = opt.get_next_x()
         #print("next x is for function {} and has coordinates {}".format(next.function_idx, next.x))
-        
+
         if (next.function_idx == 0):
             a = next.x[0]
             b = next.x[1]
@@ -65,5 +65,5 @@ def test_on_holder_table():
     x,y = find_min_global(holder_table, 
                             [-10,-10],  
                             [10,10],   
-                            200)       
-    assert (y - -19.2085025679) < 1e-7
+                            200)
+    assert y > -19.208502467899997

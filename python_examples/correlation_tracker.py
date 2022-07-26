@@ -47,7 +47,7 @@ tracker = dlib.correlation_tracker()
 win = dlib.image_window()
 # We will track the frames as we load them off of disk
 for k, f in enumerate(sorted(glob.glob(os.path.join(video_folder, "*.jpg")))):
-    print("Processing Frame {}".format(k))
+    print(f"Processing Frame {k}")
     img = dlib.load_rgb_image(f)
 
     # We need to initialize the tracker on the first frame

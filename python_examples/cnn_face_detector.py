@@ -48,7 +48,7 @@ cnn_face_detector = dlib.cnn_face_detection_model_v1(sys.argv[1])
 win = dlib.image_window()
 
 for f in sys.argv[2:]:
-    print("Processing file: {}".format(f))
+    print(f"Processing file: {f}")
     img = dlib.load_rgb_image(f)
     # The 1 in the second argument indicates that we should upsample the image
     # 1 time.  This will make everything bigger and allow us to detect more
@@ -65,10 +65,12 @@ for f in sys.argv[2:]:
     In this case it will return a mmod_rectangless object.
     This object behaves just like a list of lists and can be iterated over.
     '''
-    print("Number of faces detected: {}".format(len(dets)))
+    print(f"Number of faces detected: {len(dets)}")
     for i, d in enumerate(dets):
-        print("Detection {}: Left: {} Top: {} Right: {} Bottom: {} Confidence: {}".format(
-            i, d.rect.left(), d.rect.top(), d.rect.right(), d.rect.bottom(), d.confidence))
+        print(
+            f"Detection {i}: Left: {d.rect.left()} Top: {d.rect.top()} Right: {d.rect.right()} Bottom: {d.rect.bottom()} Confidence: {d.confidence}"
+        )
+
 
     rects = dlib.rectangles()
     rects.extend([d.rect for d in dets])

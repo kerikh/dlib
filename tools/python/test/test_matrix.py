@@ -19,7 +19,7 @@ def test_matrix_empty_init():
     assert m.shape == (0, 0)
     assert len(m) == 0
     assert repr(m) == "< dlib.matrix containing: >"
-    assert str(m) == ""
+    assert not str(m)
 
 
 def test_matrix_from_list():

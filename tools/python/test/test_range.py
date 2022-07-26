@@ -7,7 +7,7 @@ from pytest import raises
 
 
 def test_range():
-    r = range(0, 10)
+    r = range(10)
     assert r.begin == 0
     assert r.end == 10
     assert str(r) == "0, 10"

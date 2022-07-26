@@ -10,7 +10,7 @@ def test_vector_empty_init():
     v = vector()
     assert len(v) == 0
     assert v.shape == (0, 1)
-    assert str(v) == ""
+    assert not str(v)
     assert repr(v) == "dlib.vector([])"
 
 

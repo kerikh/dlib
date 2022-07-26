@@ -46,8 +46,8 @@ assignment = dlib.max_cost_assignment(cost)
 # which indicates that we should assign the person from the first row of the
 # cost matrix to job 2, the middle row person to job 0, and the bottom row
 # person to job 1.
-print("Optimal assignments: {}".format(assignment))
+print(f"Optimal assignments: {assignment}")
 
 # This prints optimal cost:  16.0
 # which is correct since our optimal assignment is 6+5+5.
-print("Optimal cost: {}".format(dlib.assignment_cost(cost, assignment)))
+print(f"Optimal cost: {dlib.assignment_cost(cost, assignment)}")

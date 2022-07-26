@@ -18,15 +18,15 @@ def make_listing_files():
     for obj in dir(dlib):
         if obj[0] == '_':
             continue
-        print_element('dlib.'+obj, fc, ff)
+        print_element(f'dlib.{obj}', fc, ff)
 
     for obj in dir(dlib.cuda):
         if obj[0] == '_':
             continue
-        print_element('dlib.cuda.'+obj, fc, ff)
+        print_element(f'dlib.cuda.{obj}', fc, ff)
 
     for obj in dir(dlib.image_dataset_metadata):
         if obj[0] == '_':
             continue
-        print_element('dlib.image_dataset_metadata.'+obj, fc, ff)
+        print_element(f'dlib.image_dataset_metadata.{obj}', fc, ff)
 
